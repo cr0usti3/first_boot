@@ -16,9 +16,9 @@ except IOError :
 
 env.user='root'
 
-
 def memory():
-    run('free -m ')
+    with settings(warn_only=True):
+        run('free -m ')
 
 # determine os type
 def osdef() :
@@ -43,5 +43,13 @@ def ntp():
     run('apt-get install -y  openntpd ')
     run('apt-get install -y  ntpdate')
 
+def sethostname(name=''):
+    run('echo {} > /etc/hostname'.format(name) )
+    run('cat /etc/hostname > /proc/sys/kernel/hostname')
 
+
+def install_base():
+    run('apt-get update')
+    run('apt-get install -y  tmux screen vim iputils-ping apt-transport-https ca-certificates curl gnupg2 ')
+    put('base_files/bashrc','/root/.bashrc')
 
